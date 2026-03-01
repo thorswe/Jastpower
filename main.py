@@ -1,6 +1,9 @@
+import os
+from openai import OpenAI
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = FastAPI()
 
 class WineInput(BaseModel):
@@ -13,23 +16,27 @@ class WineInput(BaseModel):
 def analyze_wine(data: WineInput):
     abv = (data.og - data.fg) / 7.5
 
-    # Enkel logik
-    if data.fg > 30:
-        status = "active"
-        risk = "low"
-        recommendation = "Fermentation is still active. Let it continue."
-    elif 5 < data.fg <= 30:
-        status = "finishing"
-        risk = "medium"
-        recommendation = "Fermentation nearing completion. Monitor closely."
-    else:
-        status = "complete"
-        risk = "low"
-        recommendation = "Fermentation likely complete."
+    prompt = f"""
+    Analyze this wine fermentation:
+    OG: {data.og}
+    FG: {data.fg}
+    Volume: {data.volume} L
+    Yeast: {data.yeast}
+    Estimated ABV: {abv:.2f}%
+
+    Provide:
+    - status
+    - risk level
+    - recommendation
+    """
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=prompt,
+        max_output_tokens=200
+    )
 
     return {
         "abv": round(abv, 2),
-        "status": status,
-        "risk_level": risk,
-        "recommendation": recommendation
+        "ai_analysis": response.output_text
     }
