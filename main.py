@@ -1,3 +1,4 @@
+import json
 import os
 
 from fastapi import FastAPI
@@ -47,7 +48,14 @@ def analyze_wine(data: WineInput):
             "recommendation": "AI service unavailable"
         }
 
+    import json
+
+    try:
+        parsed = json.loads(ai_result.strip("` \n"))
+    except:
+        parsed = {"raw": ai_result}
+
     return {
         "abv": round(abv, 2),
-        "ai_analysis": ai_result
-    }
+        **parsed
+}
