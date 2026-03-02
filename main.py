@@ -1,5 +1,5 @@
-import json
 import os
+import json
 
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -52,6 +52,4 @@ def analyze_wine(data: WineInput):
     return {
         "abv": round(abv, 2),
         **parsed 
-
     }
-}
