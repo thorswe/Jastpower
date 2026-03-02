@@ -39,17 +39,17 @@ def analyze_wine(data: WineInput):
 
     ai_result = analyze_fermentation(prompt)
 
-if not ai_result:
+    if not ai_result:
+        return {
+            "abv": round(abv, 2),
+            "status": "unknown",
+            "risk_level": "unknown",
+            "recommendation": "AI service unavailable"
+     }
+
+    parsed = json.loads(ai_result)
+
     return {
         "abv": round(abv, 2),
-        "status": "unknown",
-        "risk_level": "unknown",
-        "recommendation": "AI service unavailable"
+        **parsed 
     }
-
-parsed = json.loads(ai_result)
-
-return {
-    "abv": round(abv, 2),
-    **parsed
-}
