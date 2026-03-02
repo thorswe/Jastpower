@@ -53,7 +53,7 @@ Estimated ABV: {abv:.2f}
             "ai_analysis": "AI service unavailable"
         }
 
-    cleaned = ai_result.replace("```json", "").replace("```", "").strip()
+cleaned = ai_result.replace("```json", "").replace("```", "").strip()
 
 try:
     parsed = json.loads(cleaned)
