@@ -44,24 +44,32 @@
 
 <script>
 async function analyze() {
-    const response = await fetch("/wine/analyze", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            og: parseFloat(document.getElementById("og").value),
-            fg: parseFloat(document.getElementById("fg").value),
-            volume: parseFloat(document.getElementById("volume").value),
-            yeast: document.getElementById("yeast").value
-        })
-    });
+    try {
+        const response = await fetch("/wine/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                og: parseFloat(document.getElementById("og").value),
+                fg: parseFloat(document.getElementById("fg").value),
+                volume: parseFloat(document.getElementById("volume").value),
+                yeast: document.getElementById("yeast").value
+            })
+        });
 
-    const data = await response.json();
+        const data = await response.json();
 
-    document.getElementById("result").innerText =
-        "ABV: " + data.abv + "%\n\n" +
-        JSON.stringify(data.ai_analysis || data, null, 2);
+        console.log("Backend response:", data);
+
+        document.getElementById("result").innerText =
+            JSON.stringify(data, null, 2);
+
+    } catch (error) {
+        console.error("Frontend error:", error);
+        document.getElementById("result").innerText =
+            "Error: " + error;
+    }
 }
 </script>
 
