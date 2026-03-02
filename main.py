@@ -1,23 +1,3 @@
-import os
-import json
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.responses import FileResponse
-from ai_service import analyze_fermentation
-
-app = FastAPI()
-
-class WineInput(BaseModel):
-    og: float
-    fg: float
-    volume: float
-    yeast: str
-
-@app.get("/")
-def root():
-    return FileResponse("index.html")
-
 @app.post("/wine/analyze")
 def analyze_wine(data: WineInput):
     abv = (data.og - data.fg) / 7.5
@@ -36,8 +16,6 @@ def analyze_wine(data: WineInput):
     Yeast: {data.yeast}
     Estimated ABV: {abv:.2f}
     """
-
-   import json
 
     ai_result = analyze_fermentation(prompt)
 
