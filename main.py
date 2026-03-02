@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from ai_service import analyze_fermentation
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = FastAPI()
 
 class WineInput(BaseModel):
