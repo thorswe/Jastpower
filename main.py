@@ -53,21 +53,21 @@ Estimated ABV: {abv:.2f}
             "ai_analysis": "AI service unavailable"
         }
 
-cleaned = ai_result.replace("```json", "").replace("```", "").strip()
+    cleaned = ai_result.replace("```json", "").replace("```", "").strip()
 
-try:
-    parsed = json.loads(cleaned)
-except Exception as e:
-    print("JSON parse error:", e)
+    try:
+        parsed = json.loads(cleaned)
+    except Exception as e:
+        print("JSON parse error:", e)
+        return {
+            "abv": round(abv, 2),
+            "status": "error",
+            "risk_level": "unknown",
+            "reasoning": "AI returned invalid JSON",
+            "recommendation": "Check backend logs"
+        }
+
     return {
         "abv": round(abv, 2),
-        "status": "error",
-        "risk_level": "unknown",
-        "reasoning": "AI returned invalid JSON",
-        "recommendation": "Check backend logs"
+        **parsed
     }
-
-return {
-    "abv": round(abv, 2),
-    **parsed
-}
