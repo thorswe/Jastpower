@@ -39,7 +39,7 @@ def analyze_wine(data: WineInput):
 
    import json
 
-ai_result = analyze_fermentation(prompt)
+    ai_result = analyze_fermentation(prompt)
 
     if not ai_result:
         return {
