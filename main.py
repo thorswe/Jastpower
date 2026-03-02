@@ -52,4 +52,6 @@ def analyze_wine(data: WineInput):
     return {
         "abv": round(abv, 2),
         **parsed 
+
     }
+}
