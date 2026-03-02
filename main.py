@@ -21,14 +21,22 @@ def analyze_wine(data: WineInput):
 
     prompt = f"""
 You are a fermentation analysis engine.
+
+Return ONLY valid JSON.
+No markdown.
+No explanation outside JSON.
+
+Format exactly like this:
+
+{{
+  "status": "active | finishing | complete | stuck",
+  "risk_level": "low | medium | high",
+  "reasoning": "short technical explanation",
+  "recommendation": "clear action advice"
+}}
+
 All gravity values are in degrees Oechsle (°Oe).
 Do NOT convert units.
-
-Return a clear structured explanation including:
-- status
-- risk level
-- reasoning
-- recommendation
 
 OG: {data.og}
 FG: {data.fg}
