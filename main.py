@@ -2,6 +2,7 @@ import os
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.responses import FileResponse
 from ai_service import analyze_fermentation
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -12,6 +13,10 @@ class WineInput(BaseModel):
     fg: float
     volume: float
     yeast: str
+
+@app.get("/")
+def root():
+    return FileResponse("index.html")
 
 @app.post("/wine/analyze")
 def analyze_wine(data: WineInput):

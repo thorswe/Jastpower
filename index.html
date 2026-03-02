@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jästpower</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f2f2f2;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Jästpower 🍷</h1>
+
+<label>OG (°Oe)</label>
+<input id="og" type="number" value="105">
+
+<label>FG (°Oe)</label>
+<input id="fg" type="number" value="20">
+
+<label>Volym (L)</label>
+<input id="volume" type="number" value="10">
+
+<label>Jäst</label>
+<input id="yeast" value="EC-1118">
+
+<button onclick="analyze()">Analysera</button>
+
+<div id="result"></div>
+
+<script>
+async function analyze() {
+    const response = await fetch("/wine/analyze", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            og: parseFloat(document.getElementById("og").value),
+            fg: parseFloat(document.getElementById("fg").value),
+            volume: parseFloat(document.getElementById("volume").value),
+            yeast: document.getElementById("yeast").value
+        })
+    });
+
+    const data = await response.json();
+
+    document.getElementById("result").innerText =
+        "ABV: " + data.abv + "%\n\n" +
+        JSON.stringify(data.ai_analysis || data, null, 2);
+}
+</script>
+
+</body>
+</html>
