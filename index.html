@@ -61,8 +61,7 @@ async function analyze() {
         const data = await response.json();
 
         document.getElementById("result").innerText =
-            "ABV: " + data.abv + "%\n\n" +
-            data.ai_analysis;
+    JSON.stringify(data, null, 2);
 
     } catch (error) {
         document.getElementById("result").innerText =

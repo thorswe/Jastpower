@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from ai_service import analyze_fermentation
+import json
 
 app = FastAPI()
 
