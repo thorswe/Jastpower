@@ -2,6 +2,7 @@ import os
 from openai import OpenAI
 from fastapi import FastAPI
 from pydantic import BaseModel
+from ai_service import analyze_fermentation
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 app = FastAPI()
@@ -17,26 +18,32 @@ def analyze_wine(data: WineInput):
     abv = (data.og - data.fg) / 7.5
 
     prompt = f"""
-    Analyze this wine fermentation:
+    You are a fermentation analysis engine.
+    All gravity values are in degrees Oechsle (°Oe).
+    Do NOT convert units.
+
+    Return ONLY valid JSON with:
+    status, risk_level, reasoning, recommendation.
+
     OG: {data.og}
     FG: {data.fg}
-    Volume: {data.volume} L
+    Volume: {data.volume}
     Yeast: {data.yeast}
-    Estimated ABV: {abv:.2f}%
-
-    Provide:
-    - status
-    - risk level
-    - recommendation
+    Estimated ABV: {abv:.2f}
     """
 
-    response = client.responses.create(
-        model="gpt-4.1-mini",
-        input=prompt,
-        max_output_tokens=200
-    )
+    ai_result = analyze_fermentation(prompt)
+
+    # Fallback om AI misslyckas
+    if not ai_result:
+        return {
+            "abv": round(abv, 2),
+            "status": "unknown",
+            "risk_level": "unknown",
+            "recommendation": "AI service unavailable"
+        }
 
     return {
         "abv": round(abv, 2),
-        "ai_analysis": response.output_text
+        "ai_analysis": ai_result
     }
