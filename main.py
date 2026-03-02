@@ -1,5 +1,5 @@
 import os
-from openai import OpenAI
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 from ai_service import analyze_fermentation
