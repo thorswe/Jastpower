@@ -58,13 +58,13 @@ async function analyze() {
             })
         });
 
-        const text = await response.text();
-        console.log("Raw response:", text);
+        const data = await response.json();
 
-        document.getElementById("result").innerText = text;
+        document.getElementById("result").innerText =
+            "ABV: " + data.abv + "%\n\n" +
+            data.ai_analysis;
 
     } catch (error) {
-        console.error("Frontend error:", error);
         document.getElementById("result").innerText =
             "Error: " + error;
     }

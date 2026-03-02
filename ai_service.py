@@ -11,8 +11,7 @@ def analyze_fermentation(prompt: str):
     response = client.responses.create(
         model="gpt-4.1-mini",
         input=prompt,
-        response_format={"type": "json_object"},
         temperature=0.2
     )
 
-    return response.output[0].content[0].text
+    return response.output_text
